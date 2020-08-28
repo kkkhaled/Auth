@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import Container from "@material-ui/core/Container";
-
+//import { browserHistory } from "react-router";
 import AuthContext from "../contexts/auth/authContext";
 function Copyright() {
   return (
@@ -48,26 +48,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+const SignUp = (props) => {
   const classes = useStyles();
   const authContext = useContext(AuthContext);
 
-  const [user, setUser] = useState({
+  const [users, setUser] = useState({
     name: "",
     email: "",
     password: "",
     password2: "",
   });
   const [alertData, setAlertData] = useState({ open: false });
-  const { register, error, clearErrors } = authContext;
+  const { register, error, clearErrors, isAuthenticated } = authContext;
 
-  const { name, email, password, password2 } = user;
+  const { name, email, password, password2 } = users;
 
   const onChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({ ...users, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
+    if (isAuthenticated) {
+      // browserHistory.push("/");
+      props.history.push("/");
+      // console.log(isAuthenticated);
+    }
     if (error !== null) {
       setAlertData({
         open: true,
@@ -76,8 +81,8 @@ export default function SignUp() {
       });
       clearErrors();
     }
-    console.log(error);
-  }, [error]);
+    // eslint-disable-next-line
+  }, [error, isAuthenticated]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -119,12 +124,8 @@ export default function SignUp() {
           message: " user created",
           type: "success",
         });
-        console.log(alertData);
-        console.log(user);
-        console.log(error);
       }
     }
-    console.log("Done");
   };
 
   return (
@@ -222,4 +223,5 @@ export default function SignUp() {
       </Box>
     </Container>
   );
-}
+};
+export default SignUp;

@@ -7,7 +7,12 @@ import SignInSide from "./ui/login";
 import SignUp from "./ui/signup";
 import Album from "./ui/home";
 import AuthState from "./contexts/auth/authState";
-function App() {
+import setAuthToken from "./utils/setAuthToken";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+const App = () => {
   return (
     <AuthState>
       <ThemeProvider theme={AppTheme}>
@@ -21,6 +26,6 @@ function App() {
       </ThemeProvider>
     </AuthState>
   );
-}
+};
 
 export default App;
